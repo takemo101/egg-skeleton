@@ -1,0 +1,17 @@
+name: PHPStan
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Execute PHPStan
+        run: vendor/bin/phpstan analyse

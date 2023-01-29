@@ -1,0 +1,20 @@
+{layout '@layout/layout.latte.html'}
+
+{block content}
+	<h1 n:block="title">Generate</h1>
+
+	<p class="important">
+		<p>出力</p>
+	</p>
+
+    <ul n:if="$files">
+        <li n:foreach="$files as $file ">{$file}</li>
+    </ul>
+{/block}
+
+{block head}
+	{include parent}
+	<style>
+		.important { color: #336699; }
+	</style>
+{/block}
