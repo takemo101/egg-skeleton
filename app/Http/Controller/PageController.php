@@ -8,6 +8,13 @@ use Takemo101\Egg\Support\Filesystem\LocalSystem;
 
 class PageController
 {
+    /**
+     * テンプレートの階層構造をそのまま表示
+     *
+     * @param LocalSystem $fs
+     * @param AppPath $appPath
+     * @param string $path
+     */
     public function page(
         LocalSystem $fs,
         AppPath $appPath,

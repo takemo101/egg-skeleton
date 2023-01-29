@@ -6,8 +6,17 @@ use App\Support\Path\AppPath;
 use Latte\Engine as Latte;
 use Takemo101\Egg\Support\Filesystem\LocalSystem;
 
+/**
+ * 静的ファイルを生成する
+ */
 class GenerateController
 {
+    /**
+     * constructor
+     *
+     * @param LocalSystem $fs
+     * @param AppPath $appPath
+     */
     public function __construct(
         private readonly LocalSystem $fs,
         private readonly AppPath $appPath,
@@ -15,12 +24,21 @@ class GenerateController
         //
     }
 
+    /**
+     * 静的ファイルを生成
+     *
+     * @param Latte $latte
+     */
     public function generate(
         Latte $latte,
     ) {
         $lattePath = $this->appPath->lattePath();
 
         $files = $this->glob($lattePath . '/page/*');
+
+        $this->fs->deleteDirectory(
+            $this->appPath->resourcePath('generate'),
+        );
 
         foreach ($files as $file) {
             $file = str_replace($lattePath, '', $file);
@@ -49,6 +67,12 @@ class GenerateController
         return latte("generate.latte.html", compact('files'));
     }
 
+    /**
+     * ファイルパスを全て取得
+     *
+     * @param string $path
+     * @return array
+     */
     private function glob(string $path): array
     {
         $files = $this->fs->glob($path);
