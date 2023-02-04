@@ -10,7 +10,7 @@ if (!function_exists('latte')) {
      * Latteでテンプレートをレンダリングしてレスポンスを返す
      *
      * @param string $path
-     * @param array $params
+     * @param object|mixed[] $params
      * @param string|null $block
      * @return Response
      */

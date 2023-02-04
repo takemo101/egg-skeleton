@@ -8,6 +8,7 @@ use Takemo101\Egg\Kernel\ApplicationPath;
 
 return function (ContainerContract $c) {
     $singletons = [
+        // テンプレートエンジン
         Latte::class => function (ContainerContract $c) {
 
             /** @var ApplicationPath */
@@ -29,15 +30,20 @@ return function (ContainerContract $c) {
 
             return $latte;
         },
+
+        // このアプリケーションのパス管理クラス
         AppPath::class => function (ContainerContract $c) {
 
             /** @var ApplicationPath */
             $appPath = $c->make(ApplicationPath::class);
 
             return new AppPath(
-                resourcePath: config('setting.resource-path', 'resource'),
-                lattePath: config('setting.latte-path', 'latte'),
-                path: $appPath,
+                resourcePath: $appPath->basePath(
+                    config('setting.resource-path', 'resource'),
+                ),
+                lattePath: $appPath->basePath(
+                    config('setting.latte-path', 'resource/latte'),
+                ),
             );
         },
     ];

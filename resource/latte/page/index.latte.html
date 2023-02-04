@@ -5,17 +5,10 @@
 
 	<p class="important">
 		<p>
-            <a href="index">IndexPage</a>
+            <a href="{route('page.index', ['path' => 'home'])}">IndexPage</a>
         </p>
         <p>
-            <a href="other/index">OtherPage</a>
+            <a href="{route('page.index', ['path' => 'other/index'])}">OtherPage</a>
         </p>
 	</p>
-{/block}
-
-{block head}
-	{include parent}
-	<style>
-		.important { color: #336699; }
-	</style>
 {/block}

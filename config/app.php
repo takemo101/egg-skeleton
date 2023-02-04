@@ -22,6 +22,7 @@ return [
         // routing match types
         'match-types' => [
             's'  => '[0-9A-Za-z-_]++',
+            '' => '.*',
         ],
     ],
 

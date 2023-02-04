@@ -1,15 +1,16 @@
 {layout '@layout/layout.latte.html'}
 
 {block content}
-	<h1 n:block="title">Generate</h1>
+	<h1 n:block="title">Error</h1>
 
 	<p class="important">
-		<p>出力</p>
+		<p>
+            <a href="index">IndexPage</a>
+        </p>
+        <p>
+            <a href="other/index">OtherPage</a>
+        </p>
 	</p>
-
-    <ul n:if="$files">
-        <li n:foreach="$files as $file ">{$file}</li>
-    </ul>
 {/block}
 
 {block head}

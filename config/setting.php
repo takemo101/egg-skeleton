@@ -8,8 +8,7 @@ return [
     'resource-path' => 'resource',
 
     // latteのテンプレートを格納するディレクトリパス
-    // リソースディレクトリからの相対パス
-    'latte-path' => 'latte',
+    'latte-path' => 'resource/latte',
 
     // latteのキャッシュを格納するディレクトリパス
     // ストレージディレクトリからの相対パス

@@ -18,8 +18,10 @@ class PageController
     public function page(
         LocalSystem $fs,
         AppPath $appPath,
-        string $path = 'index',
+        string $path,
     ) {
+        $path = empty($path) ? 'index' : $path;
+
         $file = "page/{$path}.latte.html";
 
         if (!$fs->exists(
@@ -28,6 +30,6 @@ class PageController
             throw new NotFoundHttpException();
         }
 
-        return latte("page/{$path}.latte.html");
+        return latte($file);
     }
 }
