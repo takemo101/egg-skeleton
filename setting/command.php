@@ -2,11 +2,11 @@
 
 use App\Console\Command\GenerateCommand;
 use Takemo101\Egg\Console\Command\VersionCommand;
+use Takemo101\Egg\Console\Commands;
 
-/**
- * @return array<object|class-string>
- */
-return [
-    VersionCommand::class,
-    GenerateCommand::class,
-];
+return function (Commands $commands) {
+    $commands->add(
+        VersionCommand::class,
+        GenerateCommand::class,
+    );
+};

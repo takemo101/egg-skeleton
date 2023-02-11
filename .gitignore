@@ -12,6 +12,7 @@
 /storage/log/*.log
 /storage/cache/latte/*
 /.php-cs-fixer.cache
+/resource/generate/*
 
 # other
 /.vscode
