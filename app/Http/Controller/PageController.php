@@ -4,6 +4,7 @@ namespace App\Http\Controller;
 
 use App\Support\Path\AppPath;
 use Takemo101\Egg\Http\Exception\NotFoundHttpException;
+use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Support\Filesystem\LocalSystem;
 
 class PageController
@@ -31,5 +32,19 @@ class PageController
         }
 
         return latte($file);
+    }
+
+    /**
+     * テンプレートの階層構造をそのまま表示
+     *
+     * @param LocalSystem $fs
+     * @param AppPath $appPath
+     * @param string $path
+     */
+    public function api()
+    {
+        return [
+            'version' => Application::Version,
+        ];
     }
 }

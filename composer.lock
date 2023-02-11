@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "867a16c281e1772b3895c2c7befd8025",
+    "content-hash": "d13e981e40d6f388e8f07c8d5e16776c",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -1478,16 +1478,16 @@
         },
         {
             "name": "takemo101/egg",
-            "version": "v0.0.6",
+            "version": "v0.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/takemo101/egg.git",
-                "reference": "010c3a6b0283af0cfcf279985a020c9d8d9d0985"
+                "reference": "d82c1e6b613dc52d04c179a436a931afd18e3b12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/takemo101/egg/zipball/010c3a6b0283af0cfcf279985a020c9d8d9d0985",
-                "reference": "010c3a6b0283af0cfcf279985a020c9d8d9d0985",
+                "url": "https://api.github.com/repos/takemo101/egg/zipball/d82c1e6b613dc52d04c179a436a931afd18e3b12",
+                "reference": "d82c1e6b613dc52d04c179a436a931afd18e3b12",
                 "shasum": ""
             },
             "require": {
@@ -1534,9 +1534,9 @@
             ],
             "support": {
                 "issues": "https://github.com/takemo101/egg/issues",
-                "source": "https://github.com/takemo101/egg/tree/v0.0.6"
+                "source": "https://github.com/takemo101/egg/tree/v0.0.7"
             },
-            "time": "2023-02-11T03:22:47+00:00"
+            "time": "2023-02-11T06:04:27+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
