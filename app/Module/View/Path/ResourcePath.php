@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Support\Path;
+namespace App\Module\View\Path;
 
 use Takemo101\Egg\Support\Filesystem\PathHelper;
 
 /**
- * このアプリケーションのパスを取得する
+ * リソースのパスを取得する
  */
-class AppPath
+class ResourcePath
 {
     /**
      * @var PathHelper

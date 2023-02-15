@@ -2,7 +2,7 @@
 
 namespace App\Console\Command;
 
-use App\Support\Path\AppPath;
+use App\Module\View\Path\ResourcePath;
 use Symfony\Component\Console\Output\OutputInterface;
 use Latte\Engine as Latte;
 use Takemo101\Egg\Console\Command\EggCommand;
@@ -21,15 +21,15 @@ final class GenerateCommand extends EggCommand
     public function handle(
         OutputInterface $output,
         LocalSystem $fs,
-        AppPath $appPath,
+        ResourcePath $resourcePath,
         Latte $latte,
     ) {
-        $lattePath = $appPath->lattePath();
+        $lattePath = $resourcePath->lattePath();
 
         $files = $this->glob($fs, $lattePath . '/page/*');
 
         $fs->deleteDirectory(
-            $appPath->resourcePath('generate'),
+            $resourcePath->resourcePath('generate'),
         );
 
         foreach ($files as $file) {
@@ -38,7 +38,7 @@ final class GenerateCommand extends EggCommand
 
             $generateFile = str_replace('.latte.html', '.html', $file);
             $generateFile = str_replace('page/', '', $generateFile);
-            $generateFile = $appPath->resourcePath("generate/{$generateFile}");
+            $generateFile = $resourcePath->resourcePath("generate/{$generateFile}");
 
             $generateDir = dirname($generateFile);
 
@@ -52,9 +52,9 @@ final class GenerateCommand extends EggCommand
             );
         }
 
-        $htaccessFile = $appPath->resourcePath("htaccess/.htaccess");
+        $htaccessFile = $resourcePath->resourcePath("htaccess/.htaccess");
 
-        $fs->copy($htaccessFile, $appPath->resourcePath('generate/.htaccess'));
+        $fs->copy($htaccessFile, $resourcePath->resourcePath('generate/.htaccess'));
 
         $output->writeln('generate!');
 

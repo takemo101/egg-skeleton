@@ -2,7 +2,7 @@
 
 namespace App\Http\Controller;
 
-use App\Support\Path\AppPath;
+use App\Module\View\Path\ResourcePath;
 use Takemo101\Egg\Http\Exception\NotFoundHttpException;
 use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Support\Filesystem\LocalSystem;
@@ -13,12 +13,12 @@ class PageController
      * テンプレートの階層構造をそのまま表示
      *
      * @param LocalSystem $fs
-     * @param AppPath $appPath
+     * @param ResourcePath $resourcePath
      * @param string $path
      */
     public function page(
         LocalSystem $fs,
-        AppPath $appPath,
+        ResourcePath $resourcePath,
         string $path,
     ) {
         $path = empty($path) ? 'index' : $path;
@@ -26,7 +26,7 @@ class PageController
         $file = "page/{$path}.latte.html";
 
         if (!$fs->exists(
-            $appPath->lattePath($file)
+            $resourcePath->lattePath($file)
         )) {
             throw new NotFoundHttpException();
         }
@@ -38,7 +38,7 @@ class PageController
      * テンプレートの階層構造をそのまま表示
      *
      * @param LocalSystem $fs
-     * @param AppPath $appPath
+     * @param ResourcePath $resourcePath
      * @param string $path
      */
     public function api()
