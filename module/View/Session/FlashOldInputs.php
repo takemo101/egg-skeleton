@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\View\Session;
+namespace Module\View\Session;
 
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 

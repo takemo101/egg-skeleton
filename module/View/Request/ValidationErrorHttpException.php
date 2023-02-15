@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\View\Request;
+namespace Module\View\Request;
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Takemo101\Egg\Http\Exception\HttpException;

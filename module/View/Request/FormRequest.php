@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\View\Request;
+namespace Module\View\Request;
 
 use App\Exception\ValidationErrorHttpException;
 use Symfony\Component\HttpFoundation\Request;

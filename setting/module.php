@@ -1,6 +1,6 @@
 <?php
 
-use App\Module\View\ViewModule;
+use Module\View\ViewModule;
 use Takemo101\Egg\Module\HelperModule;
 use Takemo101\Egg\Module\Modules;
 

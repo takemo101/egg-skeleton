@@ -2,7 +2,7 @@
 
 namespace App\Http\Controller;
 
-use App\Module\View\Path\ResourcePath;
+use Module\View\Path\ResourcePath;
 use Takemo101\Egg\Http\Exception\NotFoundHttpException;
 use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Support\Filesystem\LocalSystem;

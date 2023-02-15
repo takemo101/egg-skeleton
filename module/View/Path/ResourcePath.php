@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\View\Path;
+namespace Module\View\Path;
 
 use Takemo101\Egg\Support\Filesystem\PathHelper;
 

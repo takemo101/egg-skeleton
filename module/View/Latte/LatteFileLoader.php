@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\View\Latte;
+namespace Module\View\Latte;
 
 use Latte\Loaders\FileLoader;
 

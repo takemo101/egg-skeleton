@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Module\View;
+namespace Module\View;
 
-use App\Module\View\ErrorHandler\HttpErrorHandler;
-use App\Module\View\Latte\LatteFileLoader;
-use App\Module\View\Path\ResourcePath;
-use App\Module\View\Session\FlashErrorMessages;
-use App\Module\View\Session\FlashOldInputs;
+use Module\View\ErrorHandler\HttpErrorHandler;
+use Module\View\Latte\LatteFileLoader;
+use Module\View\Path\ResourcePath;
+use Module\View\Session\FlashErrorMessages;
+use Module\View\Session\FlashOldInputs;
 use Takemo101\Egg\Module\Module;
 use Takemo101\Egg\Support\Injector\ContainerContract;
 use Latte\Engine as Latte;
@@ -28,6 +28,9 @@ final class ViewModule extends Module
      */
     public function boot(): void
     {
+        // ヘルパー関数の読み込み
+        require __DIR__ . '/helper.php';
+
         // テンプレートエンジン
         $singletons = [
             Latte::class => function (ContainerContract $c) {
@@ -81,6 +84,7 @@ final class ViewModule extends Module
         }
 
         $this->hook()
+            // エラーハンドラーの入れ替え
             ->register(
                 HttpErrorHandlerContract::class,
                 fn () => new HttpErrorHandler(
@@ -89,6 +93,7 @@ final class ViewModule extends Module
                     $this->app->container,
                 ),
             )
+            // セッションからの入力値などの復元
             ->register(
                 Session::class,
                 function (Session $session) {
