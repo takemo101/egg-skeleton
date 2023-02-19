@@ -1,9 +1,16 @@
-{layout '@layout/layout.latte.html'}
+{layout '@layout.layout'}
 
 {block content}
-	<h1 n:block="title">Page</h1>
+	<h1 n:block="title">Home</h1>
 
-	<p class="important">
-		<p>ホーム</p>
-	</p>
+	<ul>
+        <li n:foreach="$blogs as $blog">
+            <div>
+                {if $blog->eyecatch}
+                    <img src="{$blog->eyecatch}" width="100">
+                {/if}
+            </div>
+            <a href="{route('blog.show', ['id' => $blog->id])}">{$blog->title}</a>
+        </li>
+    </ul>
 {/block}

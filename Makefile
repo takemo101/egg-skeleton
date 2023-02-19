@@ -76,3 +76,16 @@ analyze: ## ./vendor/bin/phpstan analyse
 .PHONY: fix
 fix: ## ./vendor/bin/php-cs-fixer fix
 	docker compose run --rm php ./vendor/bin/php-cs-fixer fix -v --diff
+
+#### for gcr ####
+.PHONY: gcr-build
+gcr-build: ## gcr docker build
+	docker image build -t egg-skeleton .
+
+.PHONY: gcr-start
+gcr-start: ## gcr docker run
+	docker run --name egg-skeleton -d -p 8080:8080 egg-skeleton
+
+.PHONY: gcr-stop
+gcr-stop: ## gcr docker run
+	docker stop egg-skeleton

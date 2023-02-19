@@ -1,0 +1,18 @@
+{layout '@layout.layout'}
+
+{block content}
+	<h1 n:block="title">{$blog->title}</h1>
+
+	<div>
+        {if $blog->eyecatch}
+            <img src="{$blog->eyecatch}"class="img-responsive">
+        {/if}
+
+        <div class="blog-content">
+            {$blog->content|noescape}
+        </div>
+
+        <div class="blog-meta">
+            <span class="blog-date">{$blog->publishedAt|date:'j. n. Y'}</span>
+        </div>
+{/block}

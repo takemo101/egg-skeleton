@@ -12,10 +12,37 @@ use Latte\Loaders\FileLoader;
 class LatteFileLoader extends FileLoader
 {
     /**
+     * テンプレートファイルの拡張子
+     */
+    public const Extension = '.latte.html';
+
+    public const Separator = '.';
+
+    /**
+     * Returns template source code.
+     */
+    public function getContent(string $fileName): string
+    {
+        return parent::getContent($this->toPath($fileName));
+    }
+
+
+    /**
      * Returns referred template name.
      */
     public function getReferredName(string $file, string $referringFile): string
     {
-        return $file;
+        return $this->toPath($file);
+    }
+
+    /**
+     * ファイルパスに変換する
+     *
+     * @param string $file
+     * @return string
+     */
+    private function toPath(string $file): string
+    {
+        return str_replace(self::Separator, '/', $file) . self::Extension;
     }
 }

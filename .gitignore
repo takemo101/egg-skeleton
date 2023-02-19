@@ -16,6 +16,7 @@
 
 # other
 /.vscode
+memo.txt
 
 # keep directory
 !.gitkeep

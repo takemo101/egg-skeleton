@@ -2,7 +2,11 @@
 
 {block content}
 	<h1 n:block="title">Error</h1>
-
+	<p class="important">
+		<p>
+            {$error->getMessage()}
+        </p>
+	</p>
 	<p class="important">
 		<p>
             <a href="index">IndexPage</a>

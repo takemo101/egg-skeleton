@@ -1,13 +1,19 @@
 <?php
 
-use App\Http\Controller\GenerateController;
-use App\Http\Controller\PageController;
+use App\Http\Controller\BlogController;
+use App\Http\Controller\HomeController;
 use Takemo101\Egg\Routing\RouteBuilder;
 
 return function (RouteBuilder $r) {
-    $r->get('/api', [PageController::class, 'api'])
-        ->name('api');
+    $r->get('/', [HomeController::class, 'home'])
+        ->name('home');
 
-    $r->get('/[:path]', [PageController::class, 'page'])
-        ->name('page.index');
+    $r->group(function (RouteBuilder $r) {
+        $r->get('/', [BlogController::class, 'index'])
+            ->name('index');
+        $r->get('/[s:id]', [BlogController::class, 'show'])
+            ->name('show');
+    })
+        ->path('/blog')
+        ->name('blog.');
 };

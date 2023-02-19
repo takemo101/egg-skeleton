@@ -1,15 +1,13 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Routing\RouteBuilder;
 use Takemo101\Egg\Support\Hook\Hook;
 use Takemo101\Egg\Support\StaticContainer;
 
 /** @var Hook */
 $hook = StaticContainer::get('hook');
-/** @var Application */
-$app = StaticContainer::get('app');
 
 $hook->register(
     RouteBuilder::class,
@@ -18,6 +16,22 @@ $hook->register(
             phpinfo();
         })
             ->name('phpinfo');
+
+        return $r;
+    },
+);
+
+// リクエストのフックによる強制https化
+$hook->register(
+    Request::class,
+    function (Request $r) {
+        if (config('setting.force_https', false)) {
+            $r->server->set('HTTPS', 'on');
+            $r->server->set('SSL', 'on');
+            $r->server->set('HTTP_X_FORWARDED_PROTO', 'https');
+            $r->server->set('HTTP_X_FORWARDED_PORT', '443');
+            $r->server->set('SERVER_PORT', '443');
+        }
 
         return $r;
     },

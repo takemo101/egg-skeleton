@@ -1,0 +1,10 @@
+# for aplication
+vendor/
+.env
+
+# for build
+.dockerignore
+.gcloudignore
+
+# for development
+.gitignore

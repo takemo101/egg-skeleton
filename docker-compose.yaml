@@ -19,6 +19,7 @@ services:
       - mysql
       - mailhog
       - phpmyadmin
+      - ngrok
     networks:
       - egg
 
@@ -61,8 +62,17 @@ services:
       - PMA_PORT=${DB_PORT}
     ports:
       - 8089:80
-    env_file:
-      - ./.env
+    networks:
+      - egg
+
+  ngrok:
+    image: 'wernight/ngrok:latest'
+    ports:
+      - ${NGROK_PORT:-4040}:4040
+    environment:
+      NGROK_AUTH: ${NGROK_AUTH_TOKEN}
+      NGROK_PROTOCOL: ${NGROK_PROTOCOL}
+      NGROK_PORT: 'egg-app:${APP_PORT:-80}'
     networks:
       - egg
 
