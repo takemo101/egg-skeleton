@@ -2,7 +2,6 @@
 
 namespace Module\Database\Command;
 
-use Cycle\Migrations\Migration;
 use Cycle\Migrations\Migrator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +10,7 @@ use Takemo101\Egg\Console\Command\EggCommand;
 
 final class MakeMigrationCommand extends EggCommand
 {
-    public const Name = 'cycle:make:migration';
+    public const Name = 'cycle:schema:make';
 
     public const Description = 'make a migration file';
 
@@ -81,7 +80,7 @@ EOT;
 
         $create = $migrator->getRepository()->registerMigration(
             $filename,
-            Migration::class,
+            self::class,
             $body,
         );
 

@@ -13,6 +13,7 @@
 /storage/cache/latte/*
 /.php-cs-fixer.cache
 /resource/generate/*
+database.sqlite
 
 # other
 /.vscode

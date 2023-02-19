@@ -88,29 +88,29 @@ final class DatabaseModule extends Module
 
         $this->app->container->singleton(
             Schema::class,
-            fn () => (new Compiler())->compile(
-                new Registry(
+            fn () => new Schema(
+                (new Compiler())->compile(
                     $this->app->container
-                        ->make(DatabaseProviderInterface::class)
+                        ->make(Registry::class),
+                    [
+                        // Annotated
+                        new Embeddings($this->app->container->make(ClassesInterface::class)),
+                        new Entities($this->app->container->make(ClassesInterface::class)),
+                        new TableInheritance(),
+                        new MergeColumns(),
+                        new MergeIndexes(),
+                        // Generator
+                        new ResetTables(),
+                        new GenerateRelations(),
+                        new GenerateModifiers(),
+                        new ValidateEntities(),
+                        new RenderTables(),
+                        new RenderRelations(),
+                        new RenderModifiers(),
+                        new SyncTables(),
+                        new GenerateTypecast(),
+                    ],
                 ),
-                [
-                    // Annotated
-                    new Embeddings($this->app->container->make(ClassesInterface::class)),
-                    new Entities($this->app->container->make(ClassesInterface::class)),
-                    new TableInheritance(),
-                    new MergeColumns(),
-                    new MergeIndexes(),
-                    // Generator
-                    new ResetTables(),
-                    new GenerateRelations(),
-                    new GenerateModifiers(),
-                    new ValidateEntities(),
-                    new RenderTables(),
-                    new RenderRelations(),
-                    new RenderModifiers(),
-                    new SyncTables(),
-                    new GenerateTypecast(),
-                ],
             ),
         );
 
@@ -119,34 +119,9 @@ final class DatabaseModule extends Module
             function () {
                 /** @var DatabaseProviderInterface */
                 $dbal = $this->app->container->make(DatabaseProviderInterface::class);
-                /** @var ClassesInterface */
-                $classLocator = $this->app->container->make(ClassesInterface::class);
-
                 return new ORM(
                     new Factory($dbal),
-                    new Schema(
-                        (new Compiler())->compile(
-                            new Registry($dbal),
-                            [
-                                // Annotated
-                                new Embeddings($this->app->container->make(ClassesInterface::class)),
-                                new Entities($this->app->container->make(ClassesInterface::class)),
-                                new TableInheritance(),
-                                new MergeColumns(),
-                                new MergeIndexes(),
-                                // Generator
-                                new ResetTables(),
-                                new GenerateRelations(),
-                                new GenerateModifiers(),
-                                new ValidateEntities(),
-                                new RenderTables(),
-                                new RenderRelations(),
-                                new RenderModifiers(),
-                                new SyncTables(),
-                                new GenerateTypecast(),
-                            ],
-                        )
-                    ),
+                    $this->app->container->make(Schema::class),
                 );
             },
         )
