@@ -43,7 +43,8 @@
         "nesbot/carbon": "^2.66",
         "cycle/orm": "^2.2",
         "cycle/annotated": "^3.2",
-        "cycle/migrations": "^4.0"
+        "cycle/migrations": "^4.0",
+        "cycle/schema-migrations-generator": "^2.1"
     },
     "require-dev": {
         "php": "^8.1",

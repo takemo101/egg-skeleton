@@ -46,4 +46,7 @@ RUN echo "Listen 8080" >> /etc/apache2/ports.conf
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
 
+RUN php command cycle:migrate
+RUN php command test
+
 EXPOSE 8080

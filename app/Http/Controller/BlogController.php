@@ -2,9 +2,11 @@
 
 namespace App\Http\Controller;
 
+use App\Repository\BlogRepository;
 use Carbon\Carbon;
 use Microcms\Client;
 use ArrayObject;
+use Cycle\ORM\ORMInterface;
 use Takemo101\Egg\Http\Exception\NotFoundHttpException;
 
 class BlogController
@@ -25,31 +27,12 @@ class BlogController
      * @param string $id
      * @return string
      */
-    public function show(Client $client, string $id)
+    public function show(ORMInterface $orm, string $id)
     {
-        try {
-            $content = $client->get('blogs', $id);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException();
-        }
+        /** @var BlogRepository */
+        $repository = $orm->getRepository('blog');
 
-        $blog = new ArrayObject([
-            'id' => $content->id,
-            'eyecatch' => isset($content->eyecatch)
-                ? $content->eyecatch->url
-                : null,
-            'title' => $content->title,
-            'content' => $content->content,
-            'category' => isset($content->category)
-                ? new ArrayObject([
-                    'id' => $content->category->id,
-                    'name' => $content->category->name,
-                ])
-                : null,
-            'publishedAt' => new Carbon($content->publishedAt),
-            'createdAt' => new Carbon($content->createdAt),
-            'updatedAt' => new Carbon($content->updatedAt),
-        ], ArrayObject::ARRAY_AS_PROPS);
+        $blog = $repository->findByPK($id);
 
         return latte('page.blog.show', compact('blog'));
     }

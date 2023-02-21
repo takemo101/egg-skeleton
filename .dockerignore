@@ -1,6 +1,9 @@
 # for aplication
 vendor/
 .env
+database.sqlite
+storage/cache/
+storage/log/
 
 # for build
 .dockerignore

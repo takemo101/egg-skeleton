@@ -28,7 +28,7 @@ final class HttpErrorHandler extends ErrorHandler
 
         return new Response(
             latte(
-                'error/error.latte.html',
+                'error.error',
                 [
                     'error' => $error,
                 ],

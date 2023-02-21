@@ -2,11 +2,6 @@
 
 namespace Module\Database;
 
-use Cycle\Annotated\Embeddings;
-use Cycle\Annotated\Entities;
-use Cycle\Annotated\MergeColumns;
-use Cycle\Annotated\MergeIndexes;
-use Cycle\Annotated\TableInheritance;
 use Takemo101\Egg\Module\Module;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\Config\DatabaseConfig;
@@ -24,22 +19,15 @@ use Cycle\ORM\EntityManager;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Registry;
-use Cycle\Schema\Generator\GenerateModifiers;
-use Cycle\Schema\Generator\GenerateRelations;
-use Cycle\Schema\Generator\GenerateTypecast;
-use Cycle\Schema\Generator\RenderModifiers;
-use Cycle\Schema\Generator\RenderRelations;
-use Cycle\Schema\Generator\RenderTables;
-use Cycle\Schema\Generator\ResetTables;
-use Cycle\Schema\Generator\SyncTables;
-use Cycle\Schema\Generator\ValidateEntities;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\FileRepository;
 use Cycle\Migrations\Migrator;
 use Module\Database\Command\InitCommand;
-use Module\Database\Command\MakeMigrationCommand;
 use Module\Database\Command\MigrateCommand;
 use Module\Database\Command\RollbackCommand;
+use Module\Database\Command\SchemaGenerateCommand;
+use Module\Database\Command\SchemaMakeCommand;
+use Module\Database\Support\CycleGeneratorCreator;
 use Takemo101\Egg\Console\Commands;
 
 final class DatabaseModule extends Module
@@ -88,30 +76,24 @@ final class DatabaseModule extends Module
 
         $this->app->container->singleton(
             Schema::class,
-            fn () => new Schema(
-                (new Compiler())->compile(
-                    $this->app->container
-                        ->make(Registry::class),
-                    [
-                        // Annotated
-                        new Embeddings($this->app->container->make(ClassesInterface::class)),
-                        new Entities($this->app->container->make(ClassesInterface::class)),
-                        new TableInheritance(),
-                        new MergeColumns(),
-                        new MergeIndexes(),
-                        // Generator
-                        new ResetTables(),
-                        new GenerateRelations(),
-                        new GenerateModifiers(),
-                        new ValidateEntities(),
-                        new RenderTables(),
-                        new RenderRelations(),
-                        new RenderModifiers(),
-                        new SyncTables(),
-                        new GenerateTypecast(),
-                    ],
-                ),
-            ),
+            function () {
+
+                $creator = new CycleGeneratorCreator();
+
+                /** @var Registry */
+                $registry = $this->app->container
+                    ->make(Registry::class);
+
+                return new Schema(
+                    (new Compiler())->compile(
+                        $this->app->container
+                            ->make(Registry::class),
+                        $creator->createSchema(
+                            $this->app->container,
+                        ),
+                    ),
+                );
+            },
         );
 
         $this->app->container->singleton(
@@ -161,7 +143,8 @@ final class DatabaseModule extends Module
                 InitCommand::class,
                 MigrateCommand::class,
                 RollbackCommand::class,
-                MakeMigrationCommand::class,
+                SchemaMakeCommand::class,
+                SchemaGenerateCommand::class,
             )
         );
     }

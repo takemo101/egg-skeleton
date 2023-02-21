@@ -26,15 +26,6 @@ class LatteFileLoader extends FileLoader
         return parent::getContent($this->toPath($fileName));
     }
 
-
-    /**
-     * Returns referred template name.
-     */
-    public function getReferredName(string $file, string $referringFile): string
-    {
-        return $this->toPath($file);
-    }
-
     /**
      * ファイルパスに変換する
      *

@@ -8,11 +8,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Takemo101\Egg\Console\Command\EggCommand;
 
-final class MakeMigrationCommand extends EggCommand
+final class SchemaMakeCommand extends EggCommand
 {
     public const Name = 'cycle:schema:make';
 
-    public const Description = 'make a migration file';
+    public const Description = 'make a cycle schema file';
 
     protected function configure(): void
     {
@@ -75,7 +75,7 @@ EOT;
 
         $body = sprintf(
             $template,
-            $this->generateMigrationClassName(),
+            $this->generateSchemaClassName(),
         );
 
         $create = $migrator->getRepository()->registerMigration(
@@ -84,18 +84,18 @@ EOT;
             $body,
         );
 
-        $output->writeln('<info>Migration <comment>' . $create . '</comment> was successfully created!</info>');
+        $output->writeln('<info>Schema <comment>' . $create . '</comment> was successfully created!</info>');
 
         return self::SUCCESS;
     }
 
     /**
-     * マイグレーションクラス名を生成する
+     * マイグレーション（スキーマ）クラス名を生成する
      *
      * @return string
      */
-    private function generateMigrationClassName(): string
+    private function generateSchemaClassName(): string
     {
-        return 'Migration' . bin2hex(random_bytes(16));
+        return 'Schema' . bin2hex(random_bytes(16));
     }
 }

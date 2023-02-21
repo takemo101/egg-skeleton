@@ -84,8 +84,9 @@ gcr-build: ## gcr docker build
 
 .PHONY: gcr-start
 gcr-start: ## gcr docker run
-	docker run --name egg-skeleton -d -p 8080:8080 egg-skeleton
+	docker run --name egg -d -p 8080:8080 egg-skeleton
 
 .PHONY: gcr-stop
 gcr-stop: ## gcr docker run
-	docker stop egg-skeleton
+	docker stop egg
+	docker rm egg
