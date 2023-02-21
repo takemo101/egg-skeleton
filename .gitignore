@@ -14,6 +14,7 @@
 /.php-cs-fixer.cache
 /resource/generate/*
 database.sqlite
+/node_modules
 
 # other
 /.vscode
