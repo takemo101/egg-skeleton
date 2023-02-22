@@ -31,7 +31,7 @@ jobs:
 
       - name: Copy Environment
         run: |
-          cp ./.gcr/.env.example $DOTENV_PATH
+          cp ./.gcr/.example.env $DOTENV_PATH
           sed -i -e "s/MICROCMS_DOMAIN/sed -i "" "s/=\${MICROCMS_DOMAIN}/=${MICROCMS_DOMAIN}/g" ${DOTENV_PATH}
           sed -i -e "s/=\${MICROCMS_API_KEY}/=${MICROCMS_API_KEY}/g" ${DOTENV_PATH}
 
