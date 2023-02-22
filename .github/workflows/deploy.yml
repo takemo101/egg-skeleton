@@ -35,12 +35,10 @@ jobs:
           sed -i -e "s/=\${MICROCMS_DOMAIN}/=${MICROCMS_DOMAIN}/g" ${DOTENV_PATH}
           sed -i -e "s/=\${MICROCMS_API_KEY}/=${MICROCMS_API_KEY}/g" ${DOTENV_PATH}
 
-      - name: Google CLI
-        uses: google-github-actions/setup-gcloud@v0.6.2
+      - name: Auth
+        uses: 'google-github-actions/auth@v0'
         with:
-          project_id: ${{ env.GCP_PROJECT }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
       - name: GCloud Deploy
         run: |
