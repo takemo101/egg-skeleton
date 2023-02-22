@@ -1,0 +1,52 @@
+name: Cloud Run Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'デブロイするブランチ'
+        required: true
+        default: 'main'
+
+env:
+  GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+  GCP_SERVICE: ${{ secrets.GCP_SERVICE }}
+  GCP_REGION: us-central1
+  GCP_PORT: 8080
+  MICROCMS_DOMAIN: ${{ secrets.MICROCMS_DOMAIN }}
+  MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+  DOTENV_PATH: ./.gcr/.deploy.env
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git checkout ${{ github.event.inputs.branch }}
+        if: ${{ github.event.inputs.branch != '' }}
+
+      - name: Copy Environment
+        run: |
+          cp ./.gcr/.env.example $DOTENV_PATH
+          sed -i -e "s/MICROCMS_DOMAIN/sed -i "" "s/=\${MICROCMS_DOMAIN}/=${MICROCMS_DOMAIN}/g" ${DOTENV_PATH}
+          sed -i -e "s/=\${MICROCMS_API_KEY}/=${MICROCMS_API_KEY}/g" ${DOTENV_PATH}
+
+      - name: Google CLI
+        uses: google-github-actions/setup-gcloud@v0.6.2
+        with:
+          project_id: ${{ env.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: GCloud Deploy
+        run: |
+          gcloud run deploy $GCP_SERVICE \
+            --project $GCP_PROJECT \
+            --region $GCP_REGION \
+            --port $GCP_PORT \
+            --platform managed \
+            --source .
