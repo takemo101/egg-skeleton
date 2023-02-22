@@ -40,14 +40,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: 'Set up GCloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          service: ${{ env.GCP_SERVICE }}
+          project_id: ${{ env.GCP_PROJECT }}
+          region: ${{ env.GCP_REGION }}
+          source: ./
 
-      - name: GCloud Deploy
-        run: |
-          gcloud run deploy $GCP_SERVICE \
-            --project $GCP_PROJECT \
-            --region $GCP_REGION \
-            --port $GCP_PORT \
-            --platform managed \
-            --source .
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
