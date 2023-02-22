@@ -80,10 +80,6 @@ final class DatabaseModule extends Module
 
                 $creator = new CycleGeneratorCreator();
 
-                /** @var Registry */
-                $registry = $this->app->container
-                    ->make(Registry::class);
-
                 return new Schema(
                     (new Compiler())->compile(
                         $this->app->container
@@ -143,7 +139,6 @@ final class DatabaseModule extends Module
                 InitCommand::class,
                 MigrateCommand::class,
                 RollbackCommand::class,
-                SchemaMakeCommand::class,
                 SchemaGenerateCommand::class,
             )
         );

@@ -1,5 +1,8 @@
 <?php
 
+use App\Repository\CategoryRepository;
+use Cycle\ORM\ORMInterface;
+use Module\View\Support\ViewDataFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Takemo101\Egg\Routing\RouteBuilder;
@@ -34,5 +37,20 @@ $hook->register(
         }
 
         return $r;
+    },
+);
+
+// Viewの共有データへのフック
+$hook->register(
+    ViewDataFactory::class,
+    function (ViewDataFactory $factory) {
+        $factory->addHandler('categories', function (ORMInterface $orm) {
+            /** @var CategoryRepository */
+            $repository = $orm->getRepository('category');
+
+            return $repository->findAll();
+        });
+
+        return $factory;
     },
 );

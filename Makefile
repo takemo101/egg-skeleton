@@ -90,3 +90,8 @@ gcr-start: ## gcr docker run
 gcr-stop: ## gcr docker run
 	docker stop egg
 	docker rm egg
+
+.PHONY: create-deploy-shell
+create-deploy-shell: ## create gcr deploy shell
+	cp deploy.example.sh deploy.sh
+	chmod +x deploy.sh

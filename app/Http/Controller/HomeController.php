@@ -3,9 +3,6 @@
 namespace App\Http\Controller;
 
 use App\Repository\BlogRepository;
-use Microcms\Client;
-use ArrayObject;
-use Carbon\Carbon;
 use Cycle\ORM\ORMInterface;
 
 class HomeController
@@ -20,7 +17,11 @@ class HomeController
         /** @var BlogRepository */
         $repository = $orm->getRepository('blog');
 
-        $blogs = $repository->findAll();
+        $blogs = $repository->findAll(
+            orderBy: [
+                'published_at' => 'DESC',
+            ]
+        );
 
         return latte('page.home', compact('blogs'));
     }

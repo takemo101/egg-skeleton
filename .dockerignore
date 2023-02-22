@@ -2,8 +2,8 @@
 vendor/
 .env
 database.sqlite
-storage/cache/
-storage/log/
+storage/cache/latte/*
+storage/log/*
 
 # for build
 .dockerignore

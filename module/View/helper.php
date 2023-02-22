@@ -1,6 +1,6 @@
 <?php
 
-use Latte\Engine as Latte;
+use Module\View\Latte\LatteViewGenerator;
 use Module\View\Session\FlashErrorMessages;
 use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Support\StaticContainer;
@@ -20,10 +20,10 @@ if (!function_exists('latte')) {
         /** @var Application */
         $app = StaticContainer::get('app');
 
-        /** @var Latte */
-        $latte = $app->container->make(Latte::class);
+        /** @var LatteViewGenerator */
+        $latte = $app->container->make(LatteViewGenerator::class);
 
-        return $latte->renderToString($path, $params, $block);
+        return $latte->generate($path, $params, $block);
     }
 }
 

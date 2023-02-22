@@ -26,11 +26,12 @@ final class BlogSeederCommand extends EggCommand
     /**
      * コマンド実行
      *
+     * @param OutputInterface $output
      * @param EntityManagerInterface $manager
      * @param Client $client
      * @return integer
      */
-    public function handle(EntityManagerInterface $manager, Client $client): int
+    public function handle(OutputInterface $output, EntityManagerInterface $manager, Client $client): int
     {
 
         $contents = $client->list('categories');
@@ -75,6 +76,8 @@ final class BlogSeederCommand extends EggCommand
                 ->persist($blog)
                 ->run();
         }
+
+        $output->writeln('<info>done!</info>');
 
         return self::SUCCESS;
     }

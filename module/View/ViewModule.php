@@ -10,6 +10,8 @@ use Module\View\Session\FlashOldInputs;
 use Takemo101\Egg\Module\Module;
 use Takemo101\Egg\Support\Injector\ContainerContract;
 use Latte\Engine as Latte;
+use Module\View\Latte\LatteViewGenerator;
+use Module\View\Support\ViewDataFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\Validation;
@@ -31,8 +33,8 @@ final class ViewModule extends Module
         // ヘルパー関数の読み込み
         require __DIR__ . '/helper.php';
 
-        // テンプレートエンジン
         $singletons = [
+            // テンプレートエンジン
             Latte::class => function (ContainerContract $c) {
 
                 /** @var ApplicationPath */
@@ -53,6 +55,24 @@ final class ViewModule extends Module
                 );
 
                 return $latte;
+            },
+
+            // 共有データ
+            ViewDataFactory::class => fn (ContainerContract $c) => new ViewDataFactory($c),
+
+            // テンプレート出力
+            LatteViewGenerator::class => function (ContainerContract $c) {
+
+                /** @var Latte */
+                $latte = $c->make(Latte::class);
+
+                $generator = new LatteViewGenerator(
+                    $latte,
+                );
+
+                $generator->share('share', $c->make(ViewDataFactory::class));
+
+                return $generator;
             },
 
             // リソースパス

@@ -3,9 +3,6 @@
 namespace App\Http\Controller;
 
 use App\Repository\BlogRepository;
-use Carbon\Carbon;
-use Microcms\Client;
-use ArrayObject;
 use Cycle\ORM\ORMInterface;
 use Takemo101\Egg\Http\Exception\NotFoundHttpException;
 
@@ -16,9 +13,18 @@ class BlogController
      *
      * @return string
      */
-    public function index()
+    public function index(ORMInterface $orm)
     {
-        return latte('page.blog.index');
+        /** @var BlogRepository */
+        $repository = $orm->getRepository('blog');
+
+        $blogs = $repository->findAll(
+            orderBy: [
+                'published_at' => 'DESC',
+            ]
+        );
+
+        return latte('page.blog.index', compact('blogs'));
     }
 
     /**
@@ -33,6 +39,10 @@ class BlogController
         $repository = $orm->getRepository('blog');
 
         $blog = $repository->findByPK($id);
+
+        if (is_null($blog)) {
+            throw new NotFoundHttpException();
+        }
 
         return latte('page.blog.show', compact('blog'));
     }

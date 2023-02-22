@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controller\BlogController;
+use App\Http\Controller\CategoryController;
 use App\Http\Controller\HomeController;
 use Takemo101\Egg\Routing\RouteBuilder;
 
@@ -16,4 +17,7 @@ return function (RouteBuilder $r) {
     })
         ->path('/blog')
         ->name('blog.');
+
+    $r->get('/category/[s:id]', [CategoryController::class, 'show'])
+        ->name('category.show');
 };

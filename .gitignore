@@ -15,6 +15,7 @@
 /resource/generate/*
 database.sqlite
 /node_modules
+/deploy.sh
 
 # other
 /.vscode

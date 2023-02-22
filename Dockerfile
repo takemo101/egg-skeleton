@@ -40,13 +40,13 @@ COPY . ./
 
 RUN /usr/bin/composer install --no-dev
 
-COPY ./.gcr/.example.env ./.env
+COPY ./.gcr/.deploy.env ./.env
 COPY ./.gcr/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN echo "Listen 8080" >> /etc/apache2/ports.conf
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
 
 RUN php command cycle:migrate
-RUN php command test
+RUN php command seed:blog
 
 EXPOSE 8080
