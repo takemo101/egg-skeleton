@@ -37,14 +37,14 @@
         "php": "^8.1",
         "ext-json": "*",
         "latte/latte": "^3.0",
-        "takemo101/egg": "^0.0.11",
         "symfony/validator": "^6.2",
         "microcmsio/microcms-php-sdk": "^1.0",
         "nesbot/carbon": "^2.66",
         "cycle/orm": "^2.2",
         "cycle/annotated": "^3.2",
         "cycle/migrations": "^4.0",
-        "cycle/schema-migrations-generator": "^2.1"
+        "cycle/schema-migrations-generator": "^2.1",
+        "takemo101/egg": "^0.0.13"
     },
     "require-dev": {
         "php": "^8.1",

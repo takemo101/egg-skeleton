@@ -39,6 +39,39 @@ final class DatabaseModule extends Module
      */
     public function boot(): void
     {
+        $this->registerCycle();
+
+        $this->hook()->register(
+            Commands::class,
+            fn (Commands $commands) => $commands->add(
+                InitCommand::class,
+                MigrateCommand::class,
+                RollbackCommand::class,
+                SchemaGenerateCommand::class,
+            ),
+        );
+
+        $currentConfigPath = __DIR__ . '/config.php';
+
+        $this->mergeConfig(
+            'cycle',
+            $currentConfigPath,
+        );
+
+        $this->publishes('cycle', [
+            $currentConfigPath => $this->app
+                ->pathSetting
+                ->configPath('cycle.php'),
+        ]);
+    }
+
+    /**
+     * Cycle関連のサービスを登録する
+     *
+     * @return void
+     */
+    private function registerCycle(): void
+    {
         $this->app->container->singleton(
             DatabaseProviderInterface::class,
             fn () => new DatabaseManager(
@@ -131,16 +164,6 @@ final class DatabaseModule extends Module
 
                 return new Migrator($config, $dbal, $repository);
             },
-        );
-
-        $this->hook()->register(
-            Commands::class,
-            fn (Commands $commands) => $commands->add(
-                InitCommand::class,
-                MigrateCommand::class,
-                RollbackCommand::class,
-                SchemaGenerateCommand::class,
-            )
         );
     }
 }

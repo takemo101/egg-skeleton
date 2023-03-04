@@ -10,12 +10,14 @@ use Module\View\Session\FlashOldInputs;
 use Takemo101\Egg\Module\Module;
 use Takemo101\Egg\Support\Injector\ContainerContract;
 use Latte\Engine as Latte;
+use Module\View\Command\ViewClearCommand;
 use Module\View\Latte\LatteViewGenerator;
 use Module\View\Support\ViewDataFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Takemo101\Egg\Console\Commands;
 use Takemo101\Egg\Http\HttpErrorHandlerContract;
 use Takemo101\Egg\Kernel\ApplicationEnvironment;
 use Takemo101\Egg\Kernel\ApplicationPath;
@@ -33,7 +35,29 @@ final class ViewModule extends Module
         // ヘルパー関数の読み込み
         require __DIR__ . '/helper.php';
 
-        $singletons = [
+        $this->registerView();
+        $this->registerViewHook();
+
+        $this->mergeConfig(
+            'latte',
+            __DIR__ . '/config.php',
+        );
+
+        $this->publishes('latte', [
+            __DIR__ . '/config.php' => $this->app
+                ->pathSetting
+                ->configPath('latte.php'),
+        ]);
+    }
+
+    /**
+     * ビュー関連のサービスを登録する
+     *
+     * @return void
+     */
+    private function registerView(): void
+    {
+        foreach ([
             // テンプレートエンジン
             Latte::class => function (ContainerContract $c) {
 
@@ -46,7 +70,7 @@ final class ViewModule extends Module
                 $latte = new Latte();
 
                 $latte->setTempDirectory($applicationPath->storagePath(
-                    config('setting.latte-cache-path', 'cache/latte')
+                    config('latte.path.cache', 'cache/latte')
                 ));
                 $latte->setLoader(
                     new LatteFileLoader(
@@ -83,10 +107,10 @@ final class ViewModule extends Module
 
                 return new ResourcePath(
                     resourcePath: $appPath->basePath(
-                        config('setting.resource-path', 'resource'),
+                        config('latte.path.resource', 'resource'),
                     ),
                     lattePath: $appPath->basePath(
-                        config('setting.latte-path', 'resource/latte'),
+                        config('latte.path.view', 'resource/latte'),
                     ),
                 );
             },
@@ -97,12 +121,18 @@ final class ViewModule extends Module
                     ->enableAnnotationMapping()
                     ->getValidator();
             },
-        ];
-
-        foreach ($singletons as $abstract => $class) {
+        ] as $abstract => $class) {
             $this->app->container->singleton($abstract, $class);
         }
+    }
 
+    /**
+     * ビュー関連のフックを登録する
+     *
+     * @return void
+     */
+    private function registerViewHook(): void
+    {
         $this->hook()
             // エラーハンドラーの入れ替え
             ->register(
@@ -139,6 +169,15 @@ final class ViewModule extends Module
                     );
 
                     return $session;
+                },
+            )
+            // コマンド登録
+            ->register(
+                Commands::class,
+                function (Commands $commands) {
+                    return $commands->add(
+                        ViewClearCommand::class,
+                    );
                 },
             );
     }
