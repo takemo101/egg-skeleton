@@ -9,6 +9,5 @@ return function (Modules $modules) {
     $modules->add(
         HelperModule::class,
         ViewModule::class,
-        DatabaseModule::class,
     );
 };
