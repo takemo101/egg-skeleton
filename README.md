@@ -1,6 +1,13 @@
 # Egg-Skeleton
 Eggフレームワークを使ったWebアプリケーションの雛形です。  
 
+## プロジェクト作成
+
+composerを使って、プロジェクトを作成します。
+```bash
+composer create-project takemo101/egg-skeleton {project-name}
+```
+
 ## 利用方法
 makeコマンドを使って、プロジェクトをスタートします。  
 以下の手順に従って、プロジェクトをスタートしてください。
