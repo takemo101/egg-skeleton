@@ -6,7 +6,8 @@
 /mysql
 
 # for phpunit
-.phpunit.result.cache
+/.phpunit.result.cache
+/.phpunit.cache
 
 # for application
 /storage/log/*.log
