@@ -6,7 +6,7 @@ MYSQL_DATA_PATH = mysql
 #### other ####
 .PHONY: setup
 setup: ## コマンド実行に必要なセットアップをする
-	cp .env.example .env
+	cp .example.env .env
 	mkdir ${MYSQL_DATA_PATH}
 
 .PHONY: help

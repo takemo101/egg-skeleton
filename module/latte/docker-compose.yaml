@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  php:
+    image: shin1x1/php-dev:${PHP_VERSION}-fpm-buster
+    volumes:
+      - ../../:/var/www/html
+    working_dir: /var/www/html/${MODULE_DIRECTORY}
+  composer:
+    image: composer:latest
+    volumes:
+      - ../../:/var/www/html
+    working_dir: /var/www/html/${MODULE_DIRECTORY}
+  phpstan:
+    image: ghcr.io/phpstan/phpstan
+    volumes:
+      - ../../:/app
+    working_dir: /app/${MODULE_DIRECTORY}

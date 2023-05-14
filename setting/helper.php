@@ -1,7 +1,6 @@
 <?php
 
-use Takemo101\Egg\Kernel\Application;
-use Takemo101\Egg\Support\StaticContainer;
+use Takemo101\Egg\Support\ServiceAccessor\AppAccessor as App;
 use Takemo101\Egg\Http\Filter\CsrfFilter;
 use Takemo101\Egg\Support\Filesystem\URLHelper;
 
@@ -13,11 +12,8 @@ if (!function_exists('csrf_token')) {
      */
     function csrf_token(): string
     {
-        /** @var Application */
-        $app = StaticContainer::get('app');
-
         /** @var CsrfFilter */
-        $filter = $app->container->make(CsrfFilter::class);
+        $filter = App::container()->make(CsrfFilter::class);
 
         return $filter->token();
     }

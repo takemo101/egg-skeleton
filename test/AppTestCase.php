@@ -2,7 +2,7 @@
 
 namespace Test;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use PHPUnit\Framework\TestCase;
 use Takemo101\Egg\Kernel\Application;
 use Takemo101\Egg\Kernel\ApplicationPath;
 use Takemo101\Egg\Kernel\Loader\HttpLoader;
@@ -10,7 +10,7 @@ use Takemo101\Egg\Kernel\Loader\HttpLoader;
 /**
  * file test
  */
-class AppTestCase extends PHPUnitTestCase
+class AppTestCase extends TestCase
 {
     /**
      * @var Application
@@ -20,8 +20,8 @@ class AppTestCase extends PHPUnitTestCase
     protected function setUp(): void
     {
         $this->app = new Application(
-            pathSetting: new ApplicationPath(
-                basePath: dirname(__DIR__),
+            path: new ApplicationPath(
+                base: dirname(__DIR__),
                 dotenv: '.testing.env',
             ),
         );

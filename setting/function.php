@@ -1,10 +1,22 @@
 <?php
 
-use Module\View\Support\ViewDataFactory;
+use App\Controller\ContactController;
+use App\Controller\HomeController;
+use Module\Latte\Support\ViewDataFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Takemo101\Egg\Console\Command\VersionCommand;
+use Takemo101\Egg\Console\Commands;
+use Takemo101\Egg\Http\Filter\CsrfFilter;
+use Takemo101\Egg\Http\Filter\MethodOverrideFilter;
+use Takemo101\Egg\Http\Filter\SessionFilter;
+use Takemo101\Egg\Http\RootFilters;
+use Takemo101\Egg\Module\HelperModule;
+use Takemo101\Egg\Module\Modules;
 use Takemo101\Egg\Routing\RouteBuilder;
+use Takemo101\Egg\Support\ServiceAccessor\ContainerAccessor as Container;
 use Takemo101\Egg\Support\ServiceAccessor\HookAccessor as Hook;
+use Module\Latte\LatteModule;
 
 Hook::onByType(
     fn (Commands $commands) => $commands->add(
@@ -21,89 +33,20 @@ Hook::onByType(
 );
 
 Hook::onByType(
-    function (RouteBuilder $r) {
-
-        $r->addMatchTypes([
-            'a' => '[a-z]',
-        ]);
-
-        $r->get('/phpinfo', function (Response $response) {
-            phpinfo();
-        })
-            ->name('phpinfo');
-
-        $r->get('/', function (Request $request, Response $response, CsrfFilter $csrf) {
-            return $response->setContent('
-            <form action="/" method="POST">
-                <input type="hidden" name="' . CsrfFilter::TokenKey . '" value="' . $csrf->token() .  '">
-                <input type="hidden" name="_method" value="PUT">
-                <input type="hidden" name="name" value="a">
-                <input type="submit" value="put">
-            </form>
-        ');
-        })
-            ->name('home');
-
-        $r->get('/test', function (Request $request, Response $response) {
-            return 'test';
-        })
-            ->name('test');
-
-        $r->put('/', function (Request $request, Response $response) {
-            return $response->setContent('put-home');
-        })
-            ->name('home.edit');
-
-        $r->get('/error', fn () => throw new NotFoundHttpException())
-            ->name('error');
-
-        $r->get('/log', function (Loggers $loggers) {
-            $loggers->get('app')->info('test');
-        })
-            ->name('log');
-
-        $r->group(function (RouteBuilder $r) {
-            $r->get('/', function (Request $request, Response $response) {
-                return new JsonResponse([
-                    'a' => 'b',
-                ]);
-            })
-                ->name('index');
-
-            $r->get('/[a:id]', function (string $id) {
-                echo $id;
-            })
-                ->name('show');
-
-            $r->put('/[i:id]/edit', function (int $id) {
-                echo $id;
-            })
-                ->name('edit');
-        })
-            ->path('group')
-            ->name('group.');
-
-        return $r;
-    },
-);
-
-Hook::onByType(
     fn (Modules $modules) => $modules->add(
         HelperModule::class,
+        LatteModule::class,
     ),
 );
 
-Hook::on(
-    'after-response',
-    function (Response $response) {
-        return $response;
-    },
-);
-
-$hook->register(
-    RouteBuilder::class,
+Hook::onByType(
     function (RouteBuilder $r) {
-        $r->get('/phpinfo', function (Response $response) {
+
+        $r->get('/', [HomeController::class, 'home'])->name('home');
+
+        $r->post('contact', [ContactController::class, 'store'])->name('contact.store');
+
+        $r->get('phpinfo', function (Response $response) {
             phpinfo();
         })
             ->name('phpinfo');
@@ -113,7 +56,7 @@ $hook->register(
 );
 
 // リクエストのフックによる強制https化
-$hook->register(
+Hook::on(
     Request::class,
     function (Request $r) {
         if (config('setting.force_https', false)) {
@@ -129,16 +72,6 @@ $hook->register(
 );
 
 // Viewの共有データへのフック
-$hook->register(
-    ViewDataFactory::class,
-    function (ViewDataFactory $factory) {
-        $factory->addHandler('categories', function (ORMInterface $orm) {
-            /** @var CategoryRepository */
-            $repository = $orm->getRepository('category');
-
-            return $repository->findAll();
-        });
-
-        return $factory;
-    },
+Hook::onByType(
+    fn (ViewDataFactory $factory) => $factory,
 );
